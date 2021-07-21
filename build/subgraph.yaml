@@ -1,6 +1,6 @@
 specVersion: 0.0.2
 schema:
-  file: ./schema.graphql
+  file: schema.graphql
 dataSources:
   - kind: ethereum/contract
     name: BPRO
@@ -26,7 +26,7 @@ dataSources:
         - MinterChange
       abis:
         - name: BPRO
-          file: ./abis/BPRO.json
+          file: BPRO\abis\BPRO.json
       eventHandlers:
         - event: Approval(indexed address,indexed address,uint256)
           handler: handleApproval
@@ -38,4 +38,4 @@ dataSources:
           handler: handleMinterChanged
         - event: Transfer(indexed address,indexed address,uint256)
           handler: handleTransfer
-      file: ./src/mappings/mapping.ts
+      file: BPRO\BPRO.wasm
