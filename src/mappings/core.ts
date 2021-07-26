@@ -42,7 +42,7 @@ export function getOrCreateToken(event: ethereum.Event, address: Address): Token
   return token as Token
 }
 
-export function getOrCreateAccount(accountAddress: Bytes): Account {
+export function getOrCreateAccount(accountAddress: Address): Account {
   let accountId = accountAddress.toHex()
   let existingAccount = Account.load(accountId)
 
