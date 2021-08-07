@@ -5,7 +5,7 @@ import { Account, AccountBalance, AccountBalanceSnapshot, Delegate, Token } from
 
 import { toDecimal, ONE, ZERO } from '../helpers/numbers'
 
-const GENESIS_ADDRESS = '0x0000000000000000000000000000000000000000'
+export const GENESIS_ADDRESS = '0x0000000000000000000000000000000000000000'
 
 export function getOrCreateToken(event: ethereum.Event, address: Address): Token {
   let addressHex = address.toHexString()
@@ -42,8 +42,8 @@ export function getOrCreateToken(event: ethereum.Event, address: Address): Token
   return token as Token
 }
 
-export function getOrCreateAccount(accountAddress: Address): Account {
-  let accountId = accountAddress.toHex()
+export function getOrCreateAccount(accountAddress: Bytes): Account {
+  let accountId = accountAddress.toHexString()
   let existingAccount = Account.load(accountId)
 
   if (existingAccount != null) {
@@ -52,7 +52,10 @@ export function getOrCreateAccount(accountAddress: Address): Account {
 
   let newAccount = new Account(accountId)
   newAccount.address = accountAddress
-  newAccount.delegate = getOrCreateDelegate(accountAddress, Address.fromString(GENESIS_ADDRESS)).id
+  let delegateAddr = Address.fromString(GENESIS_ADDRESS)
+  let delegate = getOrCreateDelegate(newAccount.address as Address, delegateAddr as Address)
+  delegate.save()
+  newAccount.delegate = delegate.id
   
   return newAccount
 }

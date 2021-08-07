@@ -19,6 +19,7 @@ dataSources:
         - AccountBalance
         - AccountBalanceSnapshot
         - Token
+        - Delegate
         - DelegateChange
         - TransferEvent
         - MintEvent

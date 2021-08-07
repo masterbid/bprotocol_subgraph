@@ -25,18 +25,17 @@ import {
   getOrCreateDelegate,
   increaseAccountBalance,
   saveAccountBalanceSnapshot,
+  GENESIS_ADDRESS
 } from "./core"
 
 import { toDecimal, ONE, ZERO } from '../helpers/numbers'
 
-const GENESIS_ADDRESS = '0x0000000000000000000000000000000000000000'
-
-
 export function handleApproval(event: Approval): void {
   let token = getOrCreateToken(event, event.address)
-  let approval = ApprovalEvent.load(event.transaction.from.toHex())
+  let id = event.transaction.from.toHex()
+  let approval = ApprovalEvent.load(id)
   if (approval == null) {
-    approval = new ApprovalEvent(event.transaction.from.toHex())
+    approval = new ApprovalEvent(id)
     let owner = getOrCreateAccount(event.params.owner)
     owner.save()
     approval.owner = owner.id
@@ -110,7 +109,7 @@ export function handleMinterChanged(event: MinterChanged): void {
 
 export function handleTransfer(event: Transfer): void {
   let token = getOrCreateToken(event, event.address)
-  if (token != null) {
+  if (token == null) {
     let amount = toDecimal(event.params.amount, token.decimals)
     let isMint = event.params.from.toHex() == GENESIS_ADDRESS
     let isTransfer = !isMint
